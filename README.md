@@ -16,8 +16,6 @@ Install system-wide:
 
 ## Screenshots
 
-screenshots/screenshot1.png)
-
 ![Location Bar](screenshots/screenshot1.png)
 
 ![File Browser](screenshots/screenshot1.png)
