@@ -18,9 +18,6 @@ require_version("Gtk", "3.0")
 require_version("Nautilus", "3.0")
 from gi.repository import Gio, GObject, Gtk, Nautilus
 
-import logging
-
-
 TERMINAL = "terminator"
 REMOTE_URI_SCHEME = ["ftp", "sftp"]
 textdomain("terminator")
@@ -31,13 +28,6 @@ def _checkdecode(s):
     """Decode string assuming utf encoding if it's bytes, else return unmodified"""
 
     return s.decode("utf-8") if isinstance(s, bytes) else s
-
-
-def open_terminal_in_file(filename):
-    if filename:
-        call('{0} --working-directory "{1}" &'.format(TERMINAL, filename), shell=True)
-    else:
-        call("{0} &".format(TERMINAL), shell=True)
 
 
 class OpenTerminatorExtension(GObject.GObject, Nautilus.MenuProvider):
@@ -58,7 +48,11 @@ class OpenTerminatorExtension(GObject.GObject, Nautilus.MenuProvider):
             call('{0} -e "{1}" &'.format(TERMINAL, value), shell=True)
         else:
             filename = Gio.File.new_for_uri(file_.get_uri()).get_path()
-            open_terminal_in_file(filename)
+            if filename:
+                call('{0} --working-directory "{1}" &'.format(TERMINAL, filename), shell=True)
+            else:
+                call("{0} &".format(TERMINAL), shell=True)
+
 
     def _menu_activate_cb(self, menu, file_):
         self._open_terminal(file_)
