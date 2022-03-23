@@ -3,6 +3,12 @@
 Add an `Open In Terminator` and `Open Terminator Here` to the right-click menu in Nautilus/Gnome Files
 
 
+## Dependencies
+
+Ensure you have thr nautilus python bindings installed
+
+    sudo dnf install nautilus-python
+
 ## Install
 
 Install for your user account:
@@ -13,8 +19,12 @@ Install system-wide:
 
     sudo curl -lo /usr/share/nautilus-python/extensions/open-terminator.py  https://raw.githubusercontent.com/timhughes/nautilus-open-terminator/master/open-terminator.py
 
+You may need to ensure all `nautilus` processes are killed 
+
+    pkill nautilus
+
 ## Screenshots
 
 ![Location Bar](screenshots/screenshot1.png)
 
-![File Browser](screenshots/screenshot1.png)
+![File Browser](screenshots/screenshot2.png)
