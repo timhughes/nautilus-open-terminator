@@ -7,7 +7,13 @@ Add an `Open In Terminator` and `Open Terminator Here` to the right-click menu i
 
 Ensure you have thr nautilus python bindings installed
 
-    sudo dnf install nautilus-python
+  - Fedora and derivitives
+    
+        sudo dnf install nautilus-python
+
+  - Debian and derivitives
+
+        sudo apt-get install python3-nautilus
 
 ## Install
 
