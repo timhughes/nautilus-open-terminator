@@ -16,7 +16,7 @@ except ImportError:
 from gi import require_version
 
 require_version("Gtk", "4.0")
-require_version("Nautilus", "4.0")
+require_version("Nautilus", "4.1")
 from gi.repository import Gio, GObject, Gtk, Nautilus
 
 TERMINAL = "terminator"
