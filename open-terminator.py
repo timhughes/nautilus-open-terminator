@@ -13,10 +13,14 @@ try:
 except ImportError:
     from urllib.parse import unquote, urlparse
 
-from gi import require_version
+from gi import require_version, Repository
 
-require_version("Gtk", "4.0")
-require_version("Nautilus", "4.0")
+repository = Repository.get_default()
+get_latest_version = lambda x: max(repository.enumerate_versions(x), key=lambda v: [int(y) for y in v.split('.')])
+
+require_version("Gtk", get_latest_version("Gtk"))
+require_version("Nautilus", get_latest_version("Nautilus"))
+
 from gi.repository import Gio, GObject, Gtk, Nautilus
 
 TERMINAL = "terminator"
