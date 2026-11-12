@@ -1,0 +1,17 @@
+Source: nautilus-open-terminator
+Section: gnome
+Priority: optional
+Maintainer: Tim Hughes <thughes@thegoldfish.org>
+Build-Depends: debhelper-compat (= 13), gettext, python3:native
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+Homepage: https://github.com/timhughes/nautilus-open-terminator
+
+Package: nautilus-open-terminator
+Architecture: all
+Depends: ${misc:Depends}, python3, python3-nautilus, terminator
+Enhances: nautilus
+Description: Open Terminator from the Nautilus context menu
+ A Nautilus (GNOME Files) extension that adds "Open In Terminator" and
+ "Open Terminator Here" entries to the right-click context menu for local
+ directories and remote SFTP locations.

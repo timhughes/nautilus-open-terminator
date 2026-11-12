@@ -1,33 +1,68 @@
 # open-terminator.py
 
-Add an `Open In Terminator` and `Open Terminator Here` to the right-click menu in Nautilus/Gnome Files
-
+Add `Open In Terminator` and `Open Terminator Here` to the right-click menu in Nautilus / GNOME Files.
 
 ## Dependencies
 
-Ensure you have thr nautilus python bindings installed
+Ensure you have the Nautilus Python bindings and `terminator` installed:
 
-  - Fedora and derivitives
-    
-        sudo dnf install nautilus-python
+  - Fedora and derivatives:
 
-  - Debian and derivitives
+        sudo dnf install nautilus-python terminator
 
-        sudo apt-get install python3-nautilus
+  - Debian / Ubuntu and derivatives:
+
+        sudo apt-get install python3-nautilus terminator
+
+  - Arch Linux:
+
+        sudo pacman -S nautilus-python terminator
 
 ## Install
 
-Install for your user account:
+Download a `.deb`, `.rpm`, or Arch `.pkg.tar.*` package from the [GitHub Releases](https://github.com/timhughes/nautilus-open-terminator/releases) page, or build and install from source:
+
+Install for your user account (with translations):
+
+    git clone https://github.com/timhughes/nautilus-open-terminator.git
+    cd nautilus-open-terminator
+    make install-user
+
+Install system-wide (with translations):
+
+    git clone https://github.com/timhughes/nautilus-open-terminator.git
+    cd nautilus-open-terminator
+    sudo make install
+
+Build local distro packages (`.deb`, `.rpm`, Arch, or source tarball into `dist/`):
+
+    make deb    # Debian/Ubuntu
+    make rpm    # Fedora/RHEL
+    make arch   # Arch Linux
+    make dist   # Source tarball
+
+Quick single-file install (English only):
 
     mkdir -p ${HOME}/.local/share/nautilus-python/extensions/
-    curl -lo ${HOME}/.local/share/nautilus-python/extensions/open-terminator.py https://raw.githubusercontent.com/timhughes/nautilus-open-terminator/master/open-terminator.py
-Install system-wide:
+    curl -Lo ${HOME}/.local/share/nautilus-python/extensions/open-terminator.py https://raw.githubusercontent.com/timhughes/nautilus-open-terminator/master/src/open-terminator.py
 
-    sudo curl -lo /usr/share/nautilus-python/extensions/open-terminator.py  https://raw.githubusercontent.com/timhughes/nautilus-open-terminator/master/open-terminator.py
-
-You may need to ensure all `nautilus` processes are killed 
+You may need to restart Nautilus to load the extension:
 
     pkill nautilus
+
+## Testing
+
+Run the unit tests, syntax check, and AppStream metadata validation:
+
+    make check
+
+## Translations
+
+Translations are managed with `gettext` in the `po/` directory. To add a new language (e.g. `sv`):
+
+    msginit -i po/nautilus-open-terminator.pot -o po/sv.po -l sv
+    # Edit po/sv.po, then test building:
+    make && make check
 
 ## Screenshots
 

@@ -1,0 +1,50 @@
+# Italian translations for nautilus-open-terminator package.
+# This file is distributed under the same license as the nautilus-open-terminator package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: nautilus-open-terminator\n"
+"Report-Msgid-Bugs-To: https://github.com/timhughes/nautilus-open-terminator/issues\n"
+"POT-Creation-Date: 2021-03-14 16:40+0000\n"
+"PO-Revision-Date: 2026-11-12 21:57+0000\n"
+"Last-Translator: \n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: open-terminator.py:94
+msgid "Open Remote Terminator"
+msgstr "Apri Terminator remoto"
+
+#: open-terminator.py:95
+#, python-brace-format
+msgid "Open Remote Terminator In {}"
+msgstr "Apri Terminator remoto in {}"
+
+#: open-terminator.py:103
+msgid "Open In Terminator"
+msgstr "Apri in Terminator"
+
+#: open-terminator.py:104
+#, python-brace-format
+msgid "Open Terminator In {}"
+msgstr "Apri Terminator in {}"
+
+#: open-terminator.py:117
+msgid "Open Remote Terminator Here"
+msgstr "Apri Terminator remoto qui"
+
+#: open-terminator.py:118
+msgid "Open Remote Terminator In This Directory"
+msgstr "Apri Terminator remoto in questa directory"
+
+#: open-terminator.py:125
+msgid "Open Terminator Here"
+msgstr "Apri Terminator qui"
+
+#: open-terminator.py:126
+msgid "Open Terminator In This Directory"
+msgstr "Apri Terminator in questa directory"

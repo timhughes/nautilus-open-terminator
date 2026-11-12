@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>io.github.timhughes.nautilus_open_terminator</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MPL-2.0</project_license>
+  <name>Open in Terminator</name>
+  <summary>Open Terminator from the Nautilus context menu</summary>
+  <description>
+    <p>
+      A Nautilus (GNOME Files) extension that adds "Open In Terminator" and
+      "Open Terminator Here" entries to the right-click context menu for local
+      directories and remote SFTP locations.
+    </p>
+  </description>
+  <extends>org.gnome.Nautilus.desktop</extends>
+  <url type="homepage">https://github.com/timhughes/nautilus-open-terminator</url>
+  <url type="bugtracker">https://github.com/timhughes/nautilus-open-terminator/issues</url>
+  <developer id="io.github.timhughes">
+    <name>Tim Hughes</name>
+  </developer>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="0.1.0" date="2026-11-12">
+      <description>
+        <p>Initial packaged release with multi-language translations and SFTP fixes.</p>
+      </description>
+    </release>
+  </releases>
+</component>

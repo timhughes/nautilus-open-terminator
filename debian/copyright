@@ -1,0 +1,20 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: nautilus-open-terminator
+Source: https://github.com/timhughes/nautilus-open-terminator
+
+Files: *
+Copyright: 2020-2026 Tim Hughes <thughes@thegoldfish.org>
+License: MPL-2.0
+
+Files: io.github.timhughes.nautilus_open_terminator.metainfo.xml
+Copyright: 2026 Tim Hughes <thughes@thegoldfish.org>
+License: CC0-1.0
+
+License: MPL-2.0
+ This Source Code Form is subject to the terms of the Mozilla Public
+ License, v. 2.0. If a copy of the MPL was not distributed with this
+ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+License: CC0-1.0
+ On Debian systems, the complete text of the CC0-1.0 license can be
+ found in `/usr/share/common-licenses/CC0-1.0'.

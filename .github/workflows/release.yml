@@ -1,0 +1,134 @@
+name: Build and Release Packages
+
+on:
+  push:
+    branches: [master, main]
+    tags: ["v*"]
+  pull_request:
+    branches: [master, main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gettext appstream python3
+
+      - name: Build and validate
+        run: |
+          make
+          make check
+
+  build-debian:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Debian build dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential debhelper devscripts dpkg-dev gettext
+
+      - name: Build .deb package
+        run: |
+          dpkg-buildpackage -us -uc -b
+          mkdir -p dist
+          mv ../*.deb dist/
+
+      - name: Upload .deb artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: debian-package
+          path: dist/*.deb
+
+  build-fedora:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Fedora build dependencies
+        run: |
+          dnf install -y rpm-build rpmdevtools appstream gettext make python3 tar gzip
+
+      - name: Build .rpm package
+        run: |
+          rpmdev-setuptree
+          VERSION=$(rpmspec -q --qf '%{version}\n' nautilus-open-terminator.spec | head -n1)
+          tar --transform="s,^\.,nautilus-open-terminator-${VERSION}," \
+            --exclude='.git' --exclude='locale' --exclude='dist' \
+            -czf ~/rpmbuild/SOURCES/nautilus-open-terminator-${VERSION}.tar.gz .
+          rpmbuild -ba nautilus-open-terminator.spec
+          mkdir -p dist
+          cp ~/rpmbuild/RPMS/noarch/*.rpm ~/rpmbuild/SRPMS/*.rpm dist/
+
+      - name: Upload .rpm artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: fedora-package
+          path: dist/*.rpm
+
+  build-arch:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Arch build dependencies
+        run: |
+          pacman -Syu --noconfirm --needed base-devel gettext python tar gzip
+
+      - name: Build Arch package
+        run: |
+          useradd -m builder
+          mkdir -p /tmp/archbuild dist
+          VERSION=$(awk -F= '/^pkgver=/{print $2}' PKGBUILD)
+          tar --transform="s,^\.,nautilus-open-terminator-${VERSION}," \
+            --exclude='.git' --exclude='locale' --exclude='dist' \
+            -czf /tmp/archbuild/nautilus-open-terminator-${VERSION}.tar.gz .
+          cp PKGBUILD /tmp/archbuild/
+          chown -R builder:builder /tmp/archbuild
+          su builder -c "cd /tmp/archbuild && makepkg --nodeps --noconfirm"
+          cp /tmp/archbuild/*.pkg.tar.* dist/
+
+      - name: Upload Arch artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: arch-package
+          path: dist/*.pkg.tar.*
+
+  release:
+    needs: [lint-and-validate, build-debian, build-fedora, build-arch]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all package artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          gh release create "$TAG_NAME" release-assets/* \
+            --repo "$REPOSITORY" \
+            --title "$TAG_NAME" \
+            --generate-notes
