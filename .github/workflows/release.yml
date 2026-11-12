@@ -51,10 +51,45 @@ jobs:
           name: debian-package
           path: dist/*.deb
 
-  build-fedora:
+  discover-fedora:
     runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.fedora.outputs.versions }}
+    steps:
+      - name: Discover current Fedora releases
+        id: fedora
+        run: |
+          VERSIONS=$(python3 -c '
+          import json, sys, urllib.request
+          try:
+              url = "https://bodhi.fedoraproject.org/releases/?state=current&rows_per_page=100"
+              with urllib.request.urlopen(url, timeout=15) as r:
+                  data = json.load(r)
+              versions = sorted(
+                  {
+                      v
+                      for rel in data.get("releases", [])
+                      for v in [rel.get("version")]
+                      if rel.get("id_prefix") == "FEDORA" and isinstance(v, str) and v.isascii() and v.isdigit()
+                  },
+                  key=int,
+              )
+          except Exception as exc:
+              print(f"::warning::Failed to query Bodhi releases ({exc}); falling back to latest", file=sys.stderr)
+              versions = []
+          print(json.dumps(versions or ["latest"]))
+          ')
+          echo "versions=$VERSIONS" >> "$GITHUB_OUTPUT"
+
+  build-fedora:
+    needs: discover-fedora
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        fedora_version: ${{ fromJson(needs.discover-fedora.outputs.versions) }}
     container:
-      image: fedora:latest
+      image: fedora:${{ matrix.fedora_version }}
     steps:
       - uses: actions/checkout@v7
 
@@ -76,7 +111,7 @@ jobs:
       - name: Upload .rpm artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: fedora-package
+          name: fedora-${{ matrix.fedora_version }}-package
           path: dist/*.rpm
 
   build-arch:
