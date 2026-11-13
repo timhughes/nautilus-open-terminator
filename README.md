@@ -50,6 +50,8 @@ You may need to restart Nautilus to load the extension:
 
     pkill nautilus
 
+*(If switching from the single-file `curl` user install to a distro package or `sudo make install`, remove `~/.local/share/nautilus-python/extensions/open-terminator.py` first to avoid duplicate menu entries.)*
+
 ## Testing
 
 Run the unit tests, syntax check, and AppStream metadata validation:
@@ -63,6 +65,12 @@ Translations are managed with `gettext` in the `po/` directory. To add a new lan
     msginit -i po/nautilus-open-terminator.pot -o po/sv.po -l sv
     # Edit po/sv.po, then test building:
     make && make check
+
+To test a translation live in Nautilus (e.g. French `fr`):
+
+    nautilus -q; LANGUAGE=fr nautilus --no-desktop &
+
+Run `nautilus -q` afterward to return Nautilus to your default language.
 
 ## Screenshots
 
